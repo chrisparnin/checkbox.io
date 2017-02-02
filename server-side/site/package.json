@@ -1,0 +1,12 @@
+{
+  "name": "design-node",
+  "description": "Survey Design Server",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "archiver": "~0.4.6",
+    "cors": "^2.7.1",
+    "express": "3.x",
+    "marked": "2.9"
+  }
+}
