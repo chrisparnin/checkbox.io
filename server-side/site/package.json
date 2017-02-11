@@ -7,6 +7,12 @@
     "archiver": "~0.4.6",
     "cors": "^2.7.1",
     "express": "3.x",
-    "marked": "2.9"
+    "mongodb": "~2.2.22",
+    "marked": "~0.3.6",
+    "json5": "~0.5.1",
+    "jade": "~1.11.0",
+    "underscore": "~1.8.3",
+    "emailjs": "~1.0.8",
+    "validator": "~6.2.1"
   }
 }

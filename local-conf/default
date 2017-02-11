@@ -1,6 +1,6 @@
 server {
   listen 80;
-  root /Users/gameweld/bitbucket/checkbox.io/checkbox.io/public_html/;
+  root /home/vagrant/checkbox.io/public_html/;
   index index.html index.htm;
 
   location / {
