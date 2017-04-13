@@ -1,5 +1,4 @@
 var firstLoad = true;
-
 var AppViewModel = {};
 
 function SetupEvents()
@@ -54,6 +53,7 @@ function SetupEvents()
 
 		$("#survey").hide();
 		$("#data-upload").show();
+		$("#abcompare").hide();	
 	});
 
 	$("#survey-btn").click( function ()
@@ -63,9 +63,21 @@ function SetupEvents()
 		$("#study-byline").text("Create a survey study.");
 
 		$("#data-upload").hide();
-		$("#survey").show();				
+		$("#survey").show();
+		$("#abcompare").hide();	
+
 	});
 
+    $("#abcompare-btn").click( function ()
+    {
+        $("#study-icon").attr("class","icon-check-empty");
+        $("#study-name").text("A/B Compare");
+        $("#study-byline").text("Create an A/B compare study ");
+
+        $("#data-upload").hide();
+        $("#survey").hide();
+        $("#abcompare").show();
+    });
 
 	// Create button handlers.
 	$("#createSurveyBtn").click( function()
@@ -80,6 +92,17 @@ function SetupEvents()
 		saveStudy(AppViewModel.dataStudyModel);
 	});
 
+    $("#createABCompareBtn").click( function()
+    {
+        console.log( "call ab compare")
+        var req = $.get('/api/newFeature/good');
+
+        req.done(function (data)
+        {
+        	console.log(data)
+            bootstrap_alert.warning( data );
+		});
+    });
 	
 }
 

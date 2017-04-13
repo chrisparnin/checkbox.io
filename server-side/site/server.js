@@ -1,12 +1,13 @@
 var express = require('express'),
         cors = require('cors'),
-	marqdown = require('./marqdown.js'),
+    marqdown = require('./marqdown.js'),
 	//routes = require('./routes/designer.js'),
 	//votes = require('./routes/live.js'),
 	//upload = require('./routes/upload.js'),
 	create = require('./routes/create.js'),
 	study = require('./routes/study.js'),
-	admin = require('./routes/admin.js')
+	admin = require('./routes/admin.js'),
+	newFeature = require('./routes/newFeature.js')
 	;
 
 var app = express();
@@ -84,7 +85,8 @@ app.post('/api/study/admin/notify/', admin.notifyParticipant);
 //app.get('/api/design/survey/vote/status', votes.status );
 //app.get('/api/design/survey/vote/stat/:id', votes.getSurveyStats );
 
-
+// New feature 1
+app.get('/api/newFeature/good', newFeature.good);
 
 app.listen(3002);
 console.log('Listening on port 3002...');
