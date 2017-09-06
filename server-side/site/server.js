@@ -6,8 +6,7 @@ var express = require('express'),
 	//upload = require('./routes/upload.js'),
 	create = require('./routes/create.js'),
 	study = require('./routes/study.js'),
-	admin = require('./routes/admin.js')
-	;
+	admin = require('./routes/admin.js');
 
 var app = express();
 
@@ -86,5 +85,5 @@ app.post('/api/study/admin/notify/', admin.notifyParticipant);
 
 
 
-app.listen(3002);
+app.listen(process.env.MONGO_PORT);
 console.log('Listening on port 3002...');

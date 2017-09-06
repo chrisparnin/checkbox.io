@@ -57,11 +57,11 @@
 					$("#owner").text( data.owner);
 					$("#owner").attr({href:"mailto:"+data.contact});
 
-					$("#public").attr({href: 'http://checkbox.io/surveys/?id=' + surveyId})
-					$("#public").text('http://checkbox.io/surveys/?id=' + surveyId);
+					$("#public").attr({href: '/surveys/?id=' + surveyId})
+					$("#public").text('/surveys/?id=' + surveyId);
 
-					$("#admin").attr({href: 'http://checkbox.io/surveys/admin/?token='+token});
-					$("#admin").text('http://checkbox.io/surveys/admin/?token='+token);
+					$("#admin").attr({href: '/surveys/admin/?token='+token});
+					$("#admin").text('/surveys/admin/?token='+token);
 
 					$("#downloadlink").attr({href: '/api/design/survey/vote/download/' + token });
 
