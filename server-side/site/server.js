@@ -85,5 +85,6 @@ app.post('/api/study/admin/notify/', admin.notifyParticipant);
 
 
 
-app.listen(process.env.MONGO_PORT);
-console.log('Listening on port 3002...');
+var port = process.env.APP_PORT;
+app.listen(port);
+console.log(`Listening on port ${port}...`);
