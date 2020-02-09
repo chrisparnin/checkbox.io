@@ -1,8 +1,10 @@
 language: node_js
 # docker cannot be run on osx in travis
-addons:
-  apt:
-    packages:
-      - mongodb
+services: mongodb
+env:
+  - APP_PORT=3002 MONGODB_PORT=27012 MONGODB_USER=travis MONGODB_PASSWORD=test
+
 install: cd server-side/site/ && npm install
+before_script:
+  - mongo site --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 script: node server.js
