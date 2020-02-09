@@ -40,7 +40,8 @@ StudyListingBase = function(study)
    self.contact = study.contact;
 
    // append images
-   for(var i=0; i < study.awards.length; i++ )
+   study.awards = study.awards == undefined ? []: study.awards;
+   for(var study of study.awards )
    {
    	var a = study.awards[i];
 		if( a.kind && a.kind !="None" )
