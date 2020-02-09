@@ -12,7 +12,7 @@ var MongoClient = mongo.MongoClient;
 var db = null;
 MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
   // Now you can use the database in the db variable
-  db = authdb;
+  db = authdb.db('site');
   console.log( err || "connected!" );
 });
 
@@ -23,16 +23,18 @@ exports.listing = function(req, res)
         db.collection('studies', function(err, studies ) {
 
             studies.find().toArray(
-                function(err, studyItems) 
+                 function(err, studyItems) 
                 {
-                    console.log(err);
+                    // console.log(studyItems);
                     votes.aggregate(
                     [
                         { $group: { _id: '$studyId', votes: { $sum: 1 } } }
-                    ], 
-                    function(err, groupResult) 
+                    ]
+                    ,async function(err, cursor)
                     {
-                        console.log(err + ":" + groupResult);
+                        let groupResult = await cursor.toArray();
+                        var util = require('util')
+                        console.log(err + ":" + util.inspect(groupResult));
 
                         var voteMap = {};
                         var result = {studies:[]};
@@ -90,6 +92,8 @@ exports.listing = function(req, res)
                         });
 
                         res.send(result);
+
+
                     });
                 }
             );

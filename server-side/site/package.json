@@ -12,7 +12,7 @@
     "jade": "^1.11.0",
     "json5": "^0.5.1",
     "marked": "0.3.9",
-    "mongodb": "^2.2.22",
+    "mongodb": "^3.5.2",
     "underscore": "^1.8.3",
     "validator": "^6.2.1"
   }
