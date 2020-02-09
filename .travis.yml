@@ -2,7 +2,7 @@ language: node_js
 # docker cannot be run on osx in travis
 services: mongodb
 env:
-  - APP_PORT=3002 MONGODB_PORT=27012 MONGODB_USER=travis MONGODB_PASSWORD=test
+  - APP_PORT=3002 MONGO_PORT=27012 MONGO_USER=travis MONGO_PASSWORD=test MONGO_IP=localhost
 
 install: cd server-side/site/ && npm install
 before_script:
