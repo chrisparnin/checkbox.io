@@ -35,16 +35,6 @@ app.post('/api/design/survey',
 	}
 );
 
-//app.get('/api/design/survey/all', routes.findAll );
-//app.get('/api/design/survey/:id', routes.findById );
-//app.get('/api/design/survey/admin/:token', routes.findByToken );
-
-//app.post('/api/design/survey/save', routes.saveSurvey );
-//app.post('/api/design/survey/open/', routes.openSurvey );
-//app.post('/api/design/survey/close/', routes.closeSurvey );
-//app.post('/api/design/survey/notify/', routes.notifyParticipant );
-
-
 //// ################################
 //// Towards general study management.
 app.get('/api/study/load/:id', study.loadStudy );
@@ -64,25 +54,6 @@ app.get('/api/study/admin/assign/:token', admin.assignWinner);
 app.post('/api/study/admin/open/', admin.openStudy );
 app.post('/api/study/admin/close/', admin.closeStudy );
 app.post('/api/study/admin/notify/', admin.notifyParticipant);
-
-//// ################################
-
-//app.post('/api/upload', upload.uploadFile );
-
-// survey listing for studies.
-//app.get('/api/design/survey/all/listing', routes.studyListing );
-
-// Download
-//app.get('/api/design/survey/vote/download/:token', votes.download );
-// Winner
-//app.get('/api/design/survey/winner/:token', votes.pickParticipant );
-
-// Voting
-//app.get('/api/design/survey/vote/all', votes.findAll );
-//app.post('/api/design/survey/vote/cast', votes.castVote );
-//app.get('/api/design/survey/vote/status', votes.status );
-//app.get('/api/design/survey/vote/stat/:id', votes.getSurveyStats );
-
 
 
 var port = process.env.APP_PORT;

@@ -7,4 +7,4 @@ env:
 install: cd server-side/site/ && npm install
 before_script:
   - mongo admin --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-script: node server.js
+script: npm test

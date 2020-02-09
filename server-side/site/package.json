@@ -2,6 +2,7 @@
   "name": "design-node",
   "description": "Survey Design Server",
   "version": "0.0.1",
+  "test": "mocha",
   "private": true,
   "dependencies": {
     "archiver": "~0.4.6",
@@ -15,5 +16,9 @@
     "mongodb": "^3.5.2",
     "underscore": "^1.8.3",
     "validator": "^6.2.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.1",
+    "supertest": "^4.0.2"
   }
 }
