@@ -1,0 +1,8 @@
+language: node_js
+# docker cannot be run on osx in travis
+addons:
+  apt:
+    packages:
+      - mongodb
+install: cd server-side/site/ && npm install
+script: cd server-side/site/ && node server.js
