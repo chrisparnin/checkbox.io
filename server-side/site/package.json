@@ -2,7 +2,9 @@
   "name": "design-node",
   "description": "Survey Design Server",
   "version": "0.0.1",
-  "test": "mocha",
+  "scripts": {
+    "test": "mocha"
+  },
   "private": true,
   "dependencies": {
     "archiver": "~0.4.6",
