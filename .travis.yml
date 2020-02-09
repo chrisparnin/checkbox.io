@@ -5,4 +5,4 @@ addons:
     packages:
       - mongodb
 install: cd server-side/site/ && npm install
-script: cd server-side/site/ && node server.js
+script: node server.js
