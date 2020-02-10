@@ -7,13 +7,15 @@ class DB
     {
         return new Promise(function(resolve,reject)
         {
-            MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, client) {
-                if( err )
-                {
-                    reject(err);
-                }
-                console.log( "connected!" );
-                resolve(client);
+            MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", 
+                {useUnifiedTopology: true}, 
+                function(err, client) {
+                    if( err )
+                    {
+                        reject(err);
+                    }
+                    console.log( "connected!" );
+                    resolve(client);
             });
         });
     }
