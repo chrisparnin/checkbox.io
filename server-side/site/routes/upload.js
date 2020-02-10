@@ -1,31 +1,9 @@
-var express = require('express');
-var fs = require("fs");
-var async = require("async");
+const async = require("async");
+const mongo = require('mongodb');
+const archiver = require('archiver');
 
-var mongo = require('mongodb');
-var check = require('validator').check;
-var _ = require('underscore');
-
-var archiver = require('archiver');
-
-var DB = require('../db');
-
-var Server = mongo.Server,
-    Db = mongo.Db,
-    ObjectID = mongo.ObjectID;
-
-var MongoClient = mongo.MongoClient;
-var db = null;
-
-(async() => {
-	db = await DB.getDB('site');
-})();
-
-// MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
-//   // Now you can use the database in the db variable
-//   db = authdb.db('site');
-//   console.log( err || "connected!" );
-// });
+const DB = require('../db');
+const ObjectID = mongo.ObjectID;
 
 exports.uploadFiles = function(req, onReady)
 {
@@ -58,6 +36,9 @@ function readFileStream(obj, onReady)
 	var fileId = obj.fileId;
 	var archive = obj.archive;
 
+	let client = await DB.getClient();
+    let db = client.db('site');
+
 	new mongo.GridStore(db, fileId, "r").open(function(err, gridStore)
     {
 		var stream = gridStore.stream(true);
@@ -82,24 +63,31 @@ function readFileStream(obj, onReady)
  	 		console.log("appended: " + gridStore.filename);
  	 	});
 
+		client.close();
 		onReady(err, fileId);
 	});
 }
 
 function readFile(fileId, onReady)
 {
+	let client = await DB.getClient();
+    let db = client.db('site');
+
 	// Read back all the written content and verify the correctness
 	mongo.GridStore.read(db, fileId, function(err, fileData) 
 	{
 		console.log( fileData.length );
+		client.close();
 		onReady(err, {fileId:fileId, data: fileData});
 	});
 }
 
 function uploadFile(file, onReady)
 {
-
 	var fileId = new ObjectID();
+
+	let client = await DB.getClient();
+    let db = client.db('site');
 
 	var gs = new mongo.GridStore(db, fileId, file.name, "w", {
 	    "content_type": file.type,
@@ -120,6 +108,7 @@ function uploadFile(file, onReady)
 					if( fileData )
 						console.log(fileData.length);
 
+					client.close();
 					onReady(err, {fileId:fileId});
 				});
 			});
