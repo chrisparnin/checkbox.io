@@ -3,25 +3,11 @@ var crypto = require('crypto');
 var emailjs = require('emailjs/email');
 var models = require('./studyModel.js');
 
- 
-var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
- 
-var MongoClient = mongo.MongoClient;
-var db = null;
-MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
-  // Now you can use the database in the db variable
-  db = authdb.db('site');
-  console.log( err || "connected!" );
-});
-
 var emailServer  = emailjs.server.connect({
    user:    process.env.MAIL_USER, 
    password:process.env.MAIL_PASSWORD, 
    host:    process.env.MAIL_SMTP, 
    ssl:     true,
-
 });
 
 exports.createStudy = function(req, res) {
@@ -37,32 +23,38 @@ exports.createStudy = function(req, res) {
 
     basicCreate( req, res, studyKind ).onCreate( function(study)
     {
-    	db.collection('studies', function(err, collection) 
-    	{
-    		if( err )
-    			console.log( err );
+        DB.getClient().then(function(client)
+        {
+            let db = client.db('site');
+            db.collection('studies', function(err, collection) 
+            {
+                if( err )
+                    console.log( err );
 
-        	collection.insert(study, {safe:true}, function(err, result) 
-        	{
-        		console.log( err || "Study created: " + study._id );
+                collection.insert(study, {safe:true}, function(err, result) 
+                {
+                    console.log( err || "Study created: " + study._id );
 
-        		if( err )
-        		{
-        			res.send({error: err });
-        		}
-        		else
-        		{
-                    study.setPublicLink( study._id );
-
-                    // update with new public link, and notify via email, redirect user to admin page.
-                    collection.update( {'_id' : study._id}, {'$set' : {'publicLink' : study.publicLink}},
-                        function(err, result )
+                    if( err )
                     {
-                        sendStudyEmail( study );
-                        res.send({admin_url: study.adminLink});
-                    });
-        		}
-        	});
+                        res.send({error: err });
+                        client.close();
+                    }
+                    else
+                    {
+                        study.setPublicLink( study._id );
+
+                        // update with new public link, and notify via email, redirect user to admin page.
+                        collection.update( {'_id' : study._id}, {'$set' : {'publicLink' : study.publicLink}},
+                            function(err, result )
+                        {
+                            sendStudyEmail( study );
+                            res.send({admin_url: study.adminLink});
+                            client.close();
+                        });
+                    }
+                });
+            });
 
         });
     });
