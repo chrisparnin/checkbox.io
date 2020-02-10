@@ -36,12 +36,15 @@ class DB
 
     static close(database)
     {
-        if( !connections.hasOwnProperty(database) )
+        return new Promise(function(resolve,reject)
         {
-            throw new Error(`Database has no connection to close: ${database}`);
-        }
-        let connection = connections[database];
-        return connection.close();
+            if( !connections.hasOwnProperty(database) )
+            {
+                reject(`Database has no connection to close: ${database}`);
+            }
+            let connection = connections[database];
+            connection.close().then( function(res) { resolve(); });
+        });
     }
 }
 
