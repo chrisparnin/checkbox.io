@@ -3,21 +3,27 @@ var check = require('validator').check;
 var _ = require('underscore');
 var fileService = require('./upload.js');
 
+var DB = require('../db');
+
 var Server = mongo.Server,
     Db = mongo.Db,
     ObjectID = mongo.ObjectID;
  
 
 var MongoClient = mongo.MongoClient;
-var db = null;
-MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
-  // Now you can use the database in the db variable
-  console.log( err || "connected!" );
-  db = authdb.db('site');
-});
 
-exports.listing = function(req, res)
+
+// var db = null;
+// MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
+//   // Now you can use the database in the db variable
+//   console.log( err || "connected!" );
+//   db = authdb.db('site');
+// });
+
+exports.listing = async function(req, res)
 {
+    let db = await DB.getDB('site');
+
     db.collection('votes', function(err, votes) {
 
         db.collection('studies', function(err, studies ) {
