@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 var check = require('validator').check;
 var _ = require('underscore');
-//var fileService = require('./upload.js');
+var fileService = require('./upload.js');
 
 var DB = require('../db');
 
@@ -9,6 +9,8 @@ var Server = mongo.Server,
     Db = mongo.Db,
     ObjectID = mongo.ObjectID;
  
+let db = null;
+(async () => { db = await DB.getDB('site'); })();
 
 // var MongoClient = mongo.MongoClient;
 // var db = null;
@@ -20,7 +22,7 @@ var Server = mongo.Server,
 
 exports.listing = async function(req, res)
 {
-    let db = await DB.getDB('site');
+
 
     let votes = await db.collection('votes');
     let studyItems = await db.collection('studies').find().toArray();
@@ -35,27 +37,18 @@ exports.listing = async function(req, res)
     // var util = require('util')
     // console.log(util.inspect(groupResult));
 
-    var voteMap = new Map(groupResult.map(i => [i._id, i.votes]));
+
+    var voteMap = new Map(groupResult.map( i => [i._id.toString(), i.votes] ));
     var result = {studies:[]};
 
-    // for( var i = 0; i < groupResult.length; i++ )
-    // {
-    //     var g = groupResult[i];
-    //     if( g._id != null )
-    //     {
-    //         voteMap[g._id] = g.votes;
-    //     }
-    // }
+    console.log( JSON.stringify([...voteMap]) );
 
-    console.log( JSON.stringify(voteMap) );
-
-    // for( var i = 0; i < studyItems.length; i++ )
     for( var s of studyItems )
     {
         if( s.skipListing ) continue;
-
-        let numVotes = voteMap[s._id] || 0;
         
+        let numVotes = voteMap.get(s._id.toString()) || 0;
+
         var study = {
             id: s._id, 
             votes: numVotes,
@@ -88,7 +81,7 @@ exports.listing = async function(req, res)
     res.send(result);
 
     // close connection;
-    DB.close('site');
+    //DB.close('site');
 
 }
 
