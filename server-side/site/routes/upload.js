@@ -36,83 +36,83 @@ function readFileStream(obj, onReady)
 	var fileId = obj.fileId;
 	var archive = obj.archive;
 
-	let client = await DB.getClient();
-    let db = client.db('site');
-
-	new mongo.GridStore(db, fileId, "r").open(function(err, gridStore)
-    {
-		var stream = gridStore.stream(true);
-		//console.log("streaming: " + fileId );
-
-        stream.on("data", function(item) {
-            // Destroy the stream
-        	//stream.destroy();
-        	//console.log("data: " + fileId);
-        });
-
-        stream.on("end", function(item) {
-        	//console.log("Stream end: " + fileId);
-        });
-
-        stream.on("close", function() {
-        	//console.log("Stream closed: " + fileId);
-        });
-
-	 	archive.append( stream, { name: fileId + "-" + gridStore.filename }, function()
- 	 	{
- 	 		console.log("appended: " + gridStore.filename);
- 	 	});
-
-		client.close();
-		onReady(err, fileId);
-	});
-}
-
-function readFile(fileId, onReady)
-{
-	let client = await DB.getClient();
-    let db = client.db('site');
-
-	// Read back all the written content and verify the correctness
-	mongo.GridStore.read(db, fileId, function(err, fileData) 
+	DB.getClient().then(function(client)
 	{
-		console.log( fileData.length );
-		client.close();
-		onReady(err, {fileId:fileId, data: fileData});
+		let db = client.db('site');
+
+		new mongo.GridStore(db, fileId, "r").open(function(err, gridStore)
+		{
+			var stream = gridStore.stream(true);
+			//console.log("streaming: " + fileId );
+	
+			stream.on("data", function(item) {
+				// Destroy the stream
+				//stream.destroy();
+				//console.log("data: " + fileId);
+			});
+	
+			stream.on("end", function(item) {
+				//console.log("Stream end: " + fileId);
+			});
+	
+			stream.on("close", function() {
+				//console.log("Stream closed: " + fileId);
+			});
+	
+			archive.append( stream, { name: fileId + "-" + gridStore.filename }, function()
+			{
+				  console.log("appended: " + gridStore.filename);
+			});
+	
+			client.close();
+			onReady(err, fileId);
+		});
 	});
 }
+
+// function readFile(fileId, onReady)
+// {
+// 	// Read back all the written content and verify the correctness
+// 	mongo.GridStore.read(db, fileId, function(err, fileData) 
+// 	{
+// 		console.log( fileData.length );
+// 		onReady(err, {fileId:fileId, data: fileData});
+// 	});
+// }
 
 function uploadFile(file, onReady)
 {
 	var fileId = new ObjectID();
 
-	let client = await DB.getClient();
-    let db = client.db('site');
-
-	var gs = new mongo.GridStore(db, fileId, file.name, "w", {
-	    "content_type": file.type,
-	    "chunk_size": 1024*8
-	});
-
-	gs.open(function(err, gs)
+	DB.getClient().then(function(client)
 	{
-		gs.writeFile(file.path, function(err, a) 
+		let db = client.db('site');
+
+		var gs = new mongo.GridStore(db, fileId, file.name, "w", {
+			"content_type": file.type,
+			"chunk_size": 1024*8
+		});
+
+		gs.open(function(err, gs)
 		{
-			console.log(err + ": wrote file");
-
-			gs.close(function(err,result)
+			gs.writeFile(file.path, function(err, a) 
 			{
-				// Read back all the written content and verify the correctness
-				mongo.GridStore.read(db, fileId, function(err, fileData) {
-					console.log(err);
-					if( fileData )
-						console.log(fileData.length);
+				console.log(err + ": wrote file");
 
-					client.close();
-					onReady(err, {fileId:fileId});
+				gs.close(function(err,result)
+				{
+					// Read back all the written content and verify the correctness
+					mongo.GridStore.read(db, fileId, function(err, fileData) {
+						console.log(err);
+						if( fileData )
+							console.log(fileData.length);
+
+						client.close();
+						onReady(err, {fileId:fileId});
+					});
 				});
-			});
 
+			});
 		});
 	});
 
