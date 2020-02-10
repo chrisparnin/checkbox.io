@@ -31,6 +31,16 @@ class DB
             }
         });
     }
+
+    static close(database)
+    {
+        if( !db.hasOwnProperty(database) )
+        {
+            throw new Error(`Database has no connection to close: ${database}`);
+        }
+        let connection = db[database];
+        return connection.close();
+    }
 }
 
 module.exports = DB;

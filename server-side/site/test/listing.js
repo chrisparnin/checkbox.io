@@ -3,6 +3,8 @@ const express = require('express');
 
 const study = require('../routes/study');
 
+const DB = require('../db');
+
 const app = express();
 
 app.get('/api/study/listing', study.listing );
@@ -18,8 +20,8 @@ describe('GET /api/study/listing', function() {
         .expect(200, done);
     });
 
-    after('Closing down express server...', function()
+    after('Closing down database connection...', function()
     {
-      app.delete('/api/study/listing');
+      DB.close('site');
     });
 });
