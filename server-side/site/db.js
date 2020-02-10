@@ -36,7 +36,7 @@ class DB
 
     static close(database)
     {
-        if( !connection.hasOwnProperty(database) )
+        if( !connections.hasOwnProperty(database) )
         {
             throw new Error(`Database has no connection to close: ${database}`);
         }
