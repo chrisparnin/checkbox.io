@@ -25,10 +25,10 @@ exports.loadStudy = function(req, res) {
         db.collection('studies', function(err, collection) {
             collection.findOne({'token':token}, function(err, item) {
                 res.send(item);
+                client.close();
             });
         });
 
-        client.close();
     });
 };
 
@@ -43,8 +43,8 @@ exports.openStudy = function(req, res) {
                 collection.update( {'_id' : study._id}, 
                         {'$set' : {'status' : 'open'}});
                 res.send({status:'ok'});
+                client.close();
             });
-            client.close();
         });
     });
 }
