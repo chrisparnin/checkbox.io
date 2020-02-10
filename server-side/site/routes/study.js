@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 var check = require('validator').check;
 var _ = require('underscore');
-var fileService = require('./upload.js');
+//var fileService = require('./upload.js');
 
 var DB = require('../db');
 
