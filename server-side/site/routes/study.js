@@ -5,9 +5,7 @@ var fileService = require('./upload.js');
 
 var DB = require('../db');
 
-var Server = mongo.Server,
-    Db = mongo.Db,
-    ObjectID = mongo.ObjectID;
+const ObjectID = mongo.ObjectID;
  
 // let db = null;
 // (async () => { db = await DB.getDB('site'); })();
@@ -78,16 +76,22 @@ exports.listing = async function(req, res)
 
 }
 
-exports.loadStudy = function(req, res) {
+exports.loadStudy = async function(req, res) {
     var id = req.params.id;
-    console.log('Retrieving study: ' + id);
-    db.collection('studies', function(err, collection) {
-        collection.findOne({'_id':new ObjectID(id)}, function(err, item) {
-            // don't allow token to be seen by others.
-            delete item["token"];
-            delete item["invitecode"];
 
-            res.send(item);
+    DB.getClient().then(function(client)
+	{
+		let db = client.db('site');
+        console.log('Retrieving study: ' + id);
+        db.collection('studies', function(err, collection) {
+            collection.findOne({'_id':new ObjectID(id)}, function(err, item) {
+                // don't allow token to be seen by others.
+                delete item["token"];
+                delete item["invitecode"];
+
+                res.send(item);
+                client.close();
+            });
         });
     });
 };
@@ -95,9 +99,13 @@ exports.loadStudy = function(req, res) {
 exports.status = function(req, res) {
     var studyId = new ObjectID(req.params.id);
 
-    db.collection('votes', function(err, collection) {
-        collection.find({'studyId':studyId}).toArray(function(err, items) {            
-            res.send({votes: items.length});
+	DB.getClient().then(function(client)
+	{
+		let db = client.db('site');
+        db.collection('votes', function(err, collection) {
+            collection.find({'studyId':studyId}).toArray(function(err, items) {            
+                res.send({votes: items.length});
+            });
         });
     });
 };
@@ -110,24 +118,31 @@ exports.voteStatus = function(req, res)
     var fingerprint = req.query.fingerprint;
 
 
-    db.collection('votes', function(err, collection) {
-        collection.find(
-        {
-            studyId: studyId,
-            ip: ip,
-            fingerprint: fingerprint
-        }).toArray(
-            function(err, items) 
+    DB.getClient().then(function(client)
+	{
+		let db = client.db('site');
+
+
+        db.collection('votes', function(err, collection) {
+            collection.find(
             {
-                if( items && items.length > 0 )
+                studyId: studyId,
+                ip: ip,
+                fingerprint: fingerprint
+            }).toArray(
+                function(err, items) 
                 {
-                    res.send({status:"voted", items: items});
-                }
-                else
-                {
-                    res.send({status:"ok"});
-                }
-            });
+                    if( items && items.length > 0 )
+                    {
+                        res.send({status:"voted", items: items});
+                    }
+                    else
+                    {
+                        res.send({status:"ok"});
+                    }
+                    client.close();
+                });
+        });
     });
 }
 
@@ -171,14 +186,19 @@ function commonSubmit(req, res, vote )
 
     console.log('Adding vote: ' + vote);
 
-    db.collection('votes', function(err, collection) {
-        collection.insert(vote, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.send( {'done':true });
-            }
+	DB.getClient().then(function(client)
+	{
+		let db = client.db('site');
+        db.collection('votes', function(err, collection) {
+            collection.insert(vote, {safe:true}, function(err, result) {
+                if (err) {
+                    res.send({'error':'An error has occurred'});
+                } else {
+                    console.log('Success: ' + JSON.stringify(result[0]));
+                    res.send( {'done':true });
+                }
+                client.close();
+            });
         });
     });
 }
