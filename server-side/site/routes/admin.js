@@ -4,6 +4,8 @@ var _ = require('underscore');
 var emailjs = require('emailjs');
 var fileService = require('./upload.js');
  
+const DB = require('../db');
+
 var emailServer  = emailjs.server.connect({
     user:    process.env.MAIL_USER, 
     password:process.env.MAIL_PASSWORD, 

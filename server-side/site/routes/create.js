@@ -3,6 +3,8 @@ var crypto = require('crypto');
 var emailjs = require('emailjs/email');
 var models = require('./studyModel.js');
 
+const DB = require('../db');
+
 var emailServer  = emailjs.server.connect({
    user:    process.env.MAIL_USER, 
    password:process.env.MAIL_PASSWORD, 
