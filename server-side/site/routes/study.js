@@ -31,71 +31,70 @@ exports.listing = async function(req, res)
         { $group: { _id: '$studyId', votes: { $sum: 1 } } }
     ]);
 
+    let groupResult = await cursor.toArray();
+    // var util = require('util')
+    // console.log(util.inspect(groupResult));
+
+    var voteMap = new Map(groupResult.map(i => [i._id, i.votes]));
+    var result = {studies:[]};
+
+    // for( var i = 0; i < groupResult.length; i++ )
+    // {
+    //     var g = groupResult[i];
+    //     if( g._id != null )
+    //     {
+    //         voteMap[g._id] = g.votes;
+    //     }
+    // }
+
+    console.log( JSON.stringify(voteMap) );
+
+    for( var i = 0; i < studyItems.length; i++ )
     {
-        let groupResult = await cursor.toArray();
-        // var util = require('util')
-        // console.log(util.inspect(groupResult));
-
-        var voteMap = {};
-        var result = {studies:[]};
-        for( var i = 0; i < groupResult.length; i++ )
+        var s = studyItems[i];
+        if( voteMap[s._id] )
         {
-            var g = groupResult[i];
-            if( g._id != null )
+            var study = {
+                id: s._id, 
+                votes: voteMap[s._id],
+                name: s.name,
+                status: s.status,
+                goal: s.goal,
+                awards: s.awards,
+                studyKind: s.studyKind,
+                link: s.publicLink,
+                results: s.results,
+                description: s.description                                    
+            };
+
+            if( s.skipListing )
             {
-                voteMap[g._id] = g.votes;
+                // skip
+            }
+            else
+            {
+                result["studies"].push( study );
             }
         }
-
-        console.log( JSON.stringify(voteMap) );
-
-        for( var i = 0; i < studyItems.length; i++ )
-        {
-            var s = studyItems[i];
-            if( voteMap[s._id] )
-            {
-                var study = {
-                    id: s._id, 
-                    votes: voteMap[s._id],
-                    name: s.name,
-                    status: s.status,
-                    goal: s.goal,
-                    awards: s.awards,
-                    studyKind: s.studyKind,
-                    link: s.publicLink,
-                    results: s.results,
-                    description: s.description                                    
-                };
-
-                if( s.skipListing )
-                {
-                    // skip
-                }
-                else
-                {
-                    result["studies"].push( study );
-                }
-            }
-        }
-
-        statusPriority = 
-        {
-            open: 0, awarded: 1, closed: 2
-        };
-
-        result.studies.sort(function(a,b)
-        {
-            var aPriority = statusPriority[a.status];
-            var bPriority = statusPriority[b.status];
-
-            return aPriority - bPriority;
-        });
-
-        res.send(result);
-
-        // close connection;
-        DB.close('site');
     }
+
+    statusPriority = 
+    {
+        open: 0, awarded: 1, closed: 2
+    };
+
+    result.studies.sort(function(a,b)
+    {
+        var aPriority = statusPriority[a.status];
+        var bPriority = statusPriority[b.status];
+
+        return aPriority - bPriority;
+    });
+
+    res.send(result);
+
+    // close connection;
+    DB.close('site');
 
 }
 
