@@ -20,12 +20,12 @@ describe('GET /api/study/listing', function() {
         .expect(200, done);
     });
 
-    after('Closing down database connection...', function(done)
-    {
-      console.log('after handler');
-      DB.close('site')
-        .then( () => {console.log('done'); done(); })
-        .catch( (e) => {console.log(e); done(); });
+    // after('Closing down database connection...', function(done)
+    // {
+    //   console.log('after handler');
+    //   DB.close('site')
+    //     .then( () => {console.log('done'); done(); })
+    //     .catch( (e) => {console.log(e); done(); });
       
-    });
+    // });
 });
