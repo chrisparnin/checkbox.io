@@ -49,33 +49,27 @@ exports.listing = async function(req, res)
 
     console.log( JSON.stringify(voteMap) );
 
-    for( var i = 0; i < studyItems.length; i++ )
+    // for( var i = 0; i < studyItems.length; i++ )
+    for( var s of studyItems )
     {
-        var s = studyItems[i];
-        if( voteMap[s._id] )
-        {
-            var study = {
-                id: s._id, 
-                votes: voteMap[s._id],
-                name: s.name,
-                status: s.status,
-                goal: s.goal,
-                awards: s.awards,
-                studyKind: s.studyKind,
-                link: s.publicLink,
-                results: s.results,
-                description: s.description                                    
-            };
+        if( s.skipListing ) continue;
 
-            if( s.skipListing )
-            {
-                // skip
-            }
-            else
-            {
-                result["studies"].push( study );
-            }
-        }
+        let numVotes = voteMap[s._id] || 0;
+        
+        var study = {
+            id: s._id, 
+            votes: numVotes,
+            name: s.name,
+            status: s.status,
+            goal: s.goal,
+            awards: s.awards,
+            studyKind: s.studyKind,
+            link: s.publicLink,
+            results: s.results,
+            description: s.description                                    
+        };
+
+        result["studies"].push( study );
     }
 
     statusPriority = 
