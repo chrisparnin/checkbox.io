@@ -1,6 +1,7 @@
 const marqdown = require('../marqdown');
 const fs = require('fs');
 const path = require('path');
+const chai = require('chai');
 
 
 describe('Render markdown', function() {
@@ -11,7 +12,7 @@ describe('Render markdown', function() {
             if( err ) throw err;
             let html = marqdown.render(data.toString());
 
-            assert(html.includes("thead"));
+            chai.assert('rendered html contains <thead>', html.includes("thead"));
 
             done();
         });
