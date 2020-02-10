@@ -5,11 +5,11 @@ var emailjs = require('emailjs');
 var fileService = require('./upload.js');
  
 var emailServer  = emailjs.server.connect({
-   user:    "supportemail@domain.com", 
-   password:"supportpwd", 
-   host:    "smtp.gmail.com", 
-   ssl:     true
-});
+    user:    process.env.MAIL_USER, 
+    password:process.env.MAIL_PASSWORD, 
+    host:    process.env.MAIL_SMTP, 
+    ssl:     true,
+ });
 
 exports.loadStudy = function(req, res) {
     var token = req.params.token;
