@@ -26,11 +26,11 @@ exports.listing = async function(req, res)
     let studyItems = await db.collection('studies').find().toArray();
 
     // console.log(studyItems);
-    votes.aggregate(
+    let cursor = await votes.aggregate(
     [
         { $group: { _id: '$studyId', votes: { $sum: 1 } } }
-    ]
-    ,async function(err, cursor)
+    ]);
+
     {
         let groupResult = await cursor.toArray();
         var util = require('util')
@@ -95,7 +95,7 @@ exports.listing = async function(req, res)
 
         // close connection;
         DB.close('site');
-    });
+    }
 
 }
 
