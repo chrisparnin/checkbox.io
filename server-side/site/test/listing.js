@@ -22,6 +22,6 @@ describe('GET /api/study/listing', function() {
 
     after('Closing down database connection...', function()
     {
-      DB.close('site');
+      DB.close('site').then( () => {console.log('done'); });
     });
 });
