@@ -9,20 +9,13 @@ var Server = mongo.Server,
     Db = mongo.Db,
     ObjectID = mongo.ObjectID;
  
-let db = null;
-(async () => { db = await DB.getDB('site'); })();
-
-// var MongoClient = mongo.MongoClient;
-// var db = null;
-// MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
-//   // Now you can use the database in the db variable
-//   console.log( err || "connected!" );
-//   db = authdb.db('site');
-// });
+// let db = null;
+// (async () => { db = await DB.getDB('site'); })();
 
 exports.listing = async function(req, res)
 {
-
+    let client = await DB.getClient();
+    let db = client.db('site');
 
     let votes = await db.collection('votes');
     let studyItems = await db.collection('studies').find().toArray();
@@ -81,7 +74,7 @@ exports.listing = async function(req, res)
     res.send(result);
 
     // close connection;
-    //DB.close('site');
+    client.close();
 
 }
 
