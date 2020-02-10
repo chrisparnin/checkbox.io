@@ -33,8 +33,8 @@ exports.listing = async function(req, res)
 
     {
         let groupResult = await cursor.toArray();
-        var util = require('util')
-        console.log(err + ":" + util.inspect(groupResult));
+        // var util = require('util')
+        // console.log(util.inspect(groupResult));
 
         var voteMap = {};
         var result = {studies:[]};
