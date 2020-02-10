@@ -12,10 +12,10 @@
     "cors": "^2.7.1",
     "emailjs": "^1.0.8",
     "express": "3.x",
-    "jade": "^1.11.0",
     "json5": "^0.5.1",
     "marked": "0.8.0",
     "mongodb": "^3.5.2",
+    "pug": "^2.0.4",
     "underscore": "^1.8.3",
     "validator": "^6.2.1"
   },

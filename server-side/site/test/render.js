@@ -14,6 +14,7 @@ describe('Render markdown', function() {
 
             chai.assert('rendered html contains <thead>', html.includes("thead"));
 
+            console.log(html);
             done();
         });
 

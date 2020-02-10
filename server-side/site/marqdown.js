@@ -1,14 +1,14 @@
 var marked = require('marked');
 var fs = require('fs');
 var JSON5 = require('json5');
-var jade = require('jade');
+var pug = require('pug');
 var _ = require('underscore');
 
-var templates = loadJadeTemplates();
+var templates = loadPugTemplates();
 
 exports.render = function(data)
 {
-	console.log(data);
+	// console.log(data);
 	marked.setOptions({gfm:true,tables:true});
 
   	var lines = data.split("\n");
@@ -29,19 +29,19 @@ exports.render = function(data)
 };
 
 
-function loadJadeTemplates()
+function loadPugTemplates()
 {
 	var options = {pretty:true};
 
-	var singlechoice = jade.compile(fs.readFileSync('jade/singlechoice.jade', 'utf8'),options);
-	var multichoice = jade.compile(fs.readFileSync('jade/multichoice.jade', 'utf8'),options);
-	var singlechoicetable = jade.compile(fs.readFileSync('jade/singlechoicetable.jade', 'utf8'),options);
-	var multichoicetable = jade.compile(fs.readFileSync('jade/multichoicetable.jade', 'utf8'),options);
-	var text = jade.compile(fs.readFileSync('jade/text.jade', 'utf8'),options);
-	var textarea = jade.compile(fs.readFileSync('jade/textarea.jade', 'utf8'),options);
-	var code = jade.compile(fs.readFileSync('jade/code.jade', 'utf8'),options);
+	var singlechoice = pug.compile(fs.readFileSync('pug/singlechoice.pug', 'utf8'),options);
+	var multichoice = pug.compile(fs.readFileSync('pug/multichoice.pug', 'utf8'),options);
+	var singlechoicetable = pug.compile(fs.readFileSync('pug/singlechoicetable.pug', 'utf8'),options);
+	var multichoicetable = pug.compile(fs.readFileSync('pug/multichoicetable.pug', 'utf8'),options);
+	var text = pug.compile(fs.readFileSync('pug/text.pug', 'utf8'),options);
+	var textarea = pug.compile(fs.readFileSync('pug/textarea.pug', 'utf8'),options);
+	var code = pug.compile(fs.readFileSync('pug/code.pug', 'utf8'),options);
 
-	var fileupload = jade.compile(fs.readFileSync('jade/upload.jade', 'utf8'),options);
+	var fileupload = pug.compile(fs.readFileSync('pug/upload.pug', 'utf8'),options);
 
 	return {
 		singlechoice: singlechoice,
