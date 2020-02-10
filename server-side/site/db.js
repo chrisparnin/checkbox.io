@@ -6,6 +6,7 @@ var Server = mongo.Server,
  
 var MongoClient = mongo.MongoClient;
 var db = {};
+var connections = {};
 
 class DB 
 {
@@ -23,6 +24,7 @@ class DB
                     console.log( "connected!" );
                     let dbConnection = authdb.db(database);
                     db[database] = database;
+                    connections[database] = authdb;
                     resolve(dbConnection)
                 });
             }
@@ -34,11 +36,11 @@ class DB
 
     static close(database)
     {
-        if( !db.hasOwnProperty(database) )
+        if( !connection.hasOwnProperty(database) )
         {
             throw new Error(`Database has no connection to close: ${database}`);
         }
-        let connection = db[database];
+        let connection = connections[database];
         return connection.close();
     }
 }
