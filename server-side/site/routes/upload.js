@@ -8,6 +8,7 @@ var _ = require('underscore');
 
 var archiver = require('archiver');
 
+var DB = require('../db');
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -15,11 +16,16 @@ var Server = mongo.Server,
 
 var MongoClient = mongo.MongoClient;
 var db = null;
-MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
-  // Now you can use the database in the db variable
-  db = authdb.db('site');
-  console.log( err || "connected!" );
-});
+
+(async() => {
+	db = await DB.getDB('site');
+})();
+
+// MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", function(err, authdb) {
+//   // Now you can use the database in the db variable
+//   db = authdb.db('site');
+//   console.log( err || "connected!" );
+// });
 
 exports.uploadFiles = function(req, onReady)
 {
