@@ -41,14 +41,13 @@ StudyListingBase = function(study)
 
    // append images
    study.awards = study.awards == undefined ? []: study.awards;
-   for(var study of study.awards )
+   for(var award of study.awards )
    {
-   	var a = study.awards[i];
-		if( a.kind && a.kind !="None" )
+		if( award.kind && award.kind !="None" )
 		{
-			a.awardImg = imageMapping[a.kind];
+			award.awardImg = imageMapping[award.kind];
 		}
-	}
+   }
 
    self.awards = study.awards;
 	self.isAwarded = study.awards && study.awards.length > 0 && study.status == "awarded";
