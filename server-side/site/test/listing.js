@@ -20,6 +20,6 @@ describe('GET /api/study/listing', function() {
 
     after('Closing down express server...', function()
     {
-      app.delete();
+      app.delete('/api/study/listing');
     });
 });
