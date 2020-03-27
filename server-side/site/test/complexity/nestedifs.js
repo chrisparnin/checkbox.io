@@ -12,7 +12,18 @@ function nested()
         }
         else if( c )
         {
-
+            if ( d )
+            {
+                if ( e )
+                {
+                    if ( f )
+                    {
+                        if ( g ) {
+                            
+                        }
+                    }
+                }
+            }
         }
         else
         {
