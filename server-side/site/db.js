@@ -7,7 +7,7 @@ class DB
     {
         return new Promise(function(resolve,reject)
         {
-            MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":27017/site?authSource=admin", 
+            MongoClient.connect("mongodb://"+process.env.MONGO_USER+":"+process.env.MONGO_PASSWORD+"@"+process.env.MONGO_IP+":"+process.env.MONGO_PORT+"/site?authSource=admin", 
                 {useUnifiedTopology: true}, 
                 function(err, client) {
                     if( err )
