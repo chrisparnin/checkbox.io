@@ -135,7 +135,7 @@ function longMethod() {
 
 
     if (t.cells.length == 0 || t.cells[0].length != t.header.length)
-        continue; // let marked handle it...
+        return; // let marked handle it...
 
     // remove table
     newTokens.splice(newTokens.length - 1, 1);
