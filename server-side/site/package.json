@@ -16,7 +16,7 @@
     "marked": "0.8.0",
     "mongodb": "^3.5.2",
     "pug": "^2.0.4",
-    "underscore": "^1.8.3",
+    "underscore": "^1.12.1",
     "validator": "^6.2.1"
   },
   "devDependencies": {
